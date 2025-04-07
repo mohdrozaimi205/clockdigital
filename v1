@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analog Clock</title>
+  <style>
+    :root {
+      --clock-size: 300px;
+      --bg-color: #121212;
+      --clock-bg: #1e1e1e;
+      --second-color: #f00;
+      --minute-color: #0f0;
+      --hour-color: #00f;
+      --spike-color: #fff;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: var(--bg-color);
+      transition: background 0.5s;
+    }
+
+    .clock {
+      position: relative;
+      width: var(--clock-size);
+      height: var(--clock-size);
+      border-radius: 50%;
+      background: var(--clock-bg);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .seconds, .minutes, .hours {
+      position: absolute;
+      height: 50px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -100%);
+      transform-origin: bottom center;
+      border-radius: 40px 0 0 40px;
+      width: calc(var(--clock-size) / 2);
+    }
+
+    .seconds {
+      background: var(--second-color);
+    }
+
+    .minutes {
+      height: 40px;
+      background: var(--minute-color);
+    }
+
+    .hours {
+      height: 30px;
+      background: var(--hour-color);
+    }
+
+    .spike {
+      position: absolute;
+      width: 4px;
+      height: 10px;
+      background: var(--spike-color);
+      top: 0;
+      left: 50%;
+      transform: rotate(var(--rotate)) translateX(-50%);
+      transform-origin: bottom center;
+    }
+  </style>
+</head>
+<body>
+  <main class="clock">
+    <div class="seconds"></div>
+    <div class="minutes"></div>
+    <div class="hours"></div>
+  </main>
+
+  <script>
+    const seconds = document.querySelector('.seconds');
+    const minutes = document.querySelector('.minutes');
+    const hours = document.querySelector('.hours');
+
+    // Create spikes
+    for (let s = 0; s < 60; s++) {
+      const mSpikeEl = document.createElement('i');
+      const sSpikeEl = document.createElement('i');
+
+      mSpikeEl.className = 'spike';
+      sSpikeEl.className = 'spike';
+
+      mSpikeEl.style = `--rotate:${6 * s}deg`;
+      sSpikeEl.style = `--rotate:${6 * s}deg`;
+
+      mSpikeEl.setAttribute('data-i', s);
+      sSpikeEl.setAttribute('data-i', s);
+
+      minutes.append(mSpikeEl);
+      seconds.append(sSpikeEl);
+    }
+
+    // Dynamic theme based on time
+    const hour = new Date().getHours();
+    const root = document.documentElement;
+
+    if (hour >= 6 && hour < 18) {
+      // Day theme
+      root.style.setProperty('--bg-color', '#f0f0f0');
+      root.style.setProperty('--clock-bg', '#ffffff');
+      root.style.setProperty('--second-color', '#ff5e5e');
+      root.style.setProperty('--minute-color', '#5effa1');
+      root.style.setProperty('--hour-color', '#5ecbff');
+      root.style.setProperty('--spike-color', '#333');
+    } else {
+      // Night theme (default)
+      root.style.setProperty('--bg-color', '#121212');
+      root.style.setProperty('--clock-bg', '#1e1e1e');
+      root.style.setProperty('--second-color', '#f00');
+      root.style.setProperty('--minute-color', '#0f0');
+      root.style.setProperty('--hour-color', '#00f');
+      root.style.setProperty('--spike-color', '#fff');
+    }
+  </script>
+</body>
+</html>
